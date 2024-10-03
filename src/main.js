@@ -11,6 +11,7 @@ const showMore = document.querySelector('.show-more');
 let pagination = {
   searchInp: '',
   page: 1,
+  totalPages: null,
 };
 
 const simpleGallery = new simpleLightbox('.simple-gal', {
@@ -31,7 +32,7 @@ async function loadMore() {
     console.log(dataApi);
 
     hideLoader();
-    showMore.classList.remove('is-hidden');
+
     gallery.insertAdjacentHTML('beforeend', render(dataApi.hits));
     simpleGallery.refresh();
     const objRect = gallery.children[0].getBoundingClientRect();
@@ -39,6 +40,11 @@ async function loadMore() {
       top: objRect.height * 2,
       behavior: 'smooth',
     });
+    if (pagination.page < pagination.totalPages) {
+      showMore.classList.remove('is-hidden');
+    } else {
+      throw new Error();
+    }
   } catch (error) {
     console.log(error);
     showMore.classList.add('is-hidden');
@@ -62,15 +68,17 @@ async function submitHandler(event) {
   console.log(inputVal);
   try {
     const dataApi = await apiRequest(inputVal.join('+'));
-    console.log(dataApi);
-
+    pagination.totalPages = Math.ceil(dataApi.totalHits / 15);
+    console.log(pagination.totalPages);
     hideLoader();
 
     gallery.insertAdjacentHTML('beforeend', render(dataApi.hits));
     simpleGallery.refresh();
-    showMore.classList.remove('is-hidden');
+    if (dataApi.totalHits > 15) {
+      showMore.classList.remove('is-hidden');
+    }
   } catch (error) {
-    console.log(error);
+    console.log(pagination.error);
 
     // Error handling
     iziToast.error({

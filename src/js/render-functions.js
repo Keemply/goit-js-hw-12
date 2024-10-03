@@ -1,6 +1,6 @@
 export function render(arrayObjects) {
   if (arrayObjects.length === 0) {
-    throw new Error(response);
+    throw new Error();
   }
 
   const insert = arrayObjects
