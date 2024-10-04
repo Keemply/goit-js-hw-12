@@ -29,7 +29,6 @@ async function loadMore() {
     showLoader();
     pagination.page++;
     const dataApi = await apiRequest(pagination.searchInp, pagination.page);
-    console.log(dataApi);
 
     hideLoader();
 
@@ -64,11 +63,10 @@ async function submitHandler(event) {
   }
   const inputVal = form[0].value.trim().split(' ');
   pagination.searchInp = inputVal.join('+');
-  console.log(inputVal);
+
   try {
     const dataApi = await apiRequest(inputVal.join('+'));
     pagination.totalPages = Math.ceil(dataApi.totalHits / 15);
-    console.log(pagination.totalPages);
     hideLoader();
 
     gallery.insertAdjacentHTML('beforeend', render(dataApi.hits));
