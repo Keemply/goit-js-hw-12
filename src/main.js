@@ -43,15 +43,14 @@ async function loadMore() {
     if (pagination.page < pagination.totalPages) {
       showMore.classList.remove('is-hidden');
     } else {
-      throw new Error();
+      iziToast.show({
+        message: "We're sorry, but you've reached the end of search results.",
+        position: 'topRight',
+      });
     }
   } catch (error) {
     console.log(error);
-    showMore.classList.add('is-hidden');
     // Error handling
-    iziToast.error({
-      message: "We're sorry, but you've reached the end of search results.",
-    });
   }
 }
 
@@ -78,8 +77,6 @@ async function submitHandler(event) {
       showMore.classList.remove('is-hidden');
     }
   } catch (error) {
-    console.log(pagination.error);
-
     // Error handling
     iziToast.error({
       message:
